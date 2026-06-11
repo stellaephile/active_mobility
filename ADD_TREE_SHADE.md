@@ -13,31 +13,31 @@ indicator in NetAScore, using the Meta/WRI 1m Global Canopy Height raster as inp
 | GEE collection | `projects/sat-io/open-datasets/facebook/meta-canopy-height` |
 | Input format | Single-band GeoTIFF, clipped to city extent |
 | Pixel values | 0–31 (metres); 0 = no canopy (valid data, not NoData) |
-| Output column | `shade_coverage` — float in [0, 1] on the edge table |
+| Output column | `shade_coverage` - float in [0, 1] on the edge table |
 | Walk weight (MAHP) | 0.0999 (rank 5 of 10) |
 | Bike weight (MAHP) | 0.0892 (rank 7 of 10) |
 
 ### Scoring curve (height-weighted, concave)
 
-Calibrated to Indian urban street trees. Both density and height drive the score —
+Calibrated to Indian urban street trees. Both density and height drive the score -
 all pixels in the 10m buffer contribute to the average, including zeros.
 
 | Canopy height | Score | Species context |
 |---|---|---|
-| 0 – 3 m | 0.00 | No canopy / shrubs / saplings — no meaningful shade |
+| 0 – 3 m | 0.00 | No canopy / shrubs / saplings - no meaningful shade |
 | 3 – 8 m | 0.30 → 0.70 | Young street trees |
 | 8 – 12 m | 0.70 → 0.90 | Mature neem, peepal |
 | 12 – 18 m | 0.90 → 1.00 | Excellent canopy |
-| ≥ 18 m | 1.00 | Rain tree / banyan — capped |
+| ≥ 18 m | 1.00 | Rain tree / banyan - capped |
 
-> Anything below 3m scores 0 — the threshold reflects the minimum canopy height
+> Anything below 3m scores 0 - the threshold reflects the minimum canopy height
 > needed to provide meaningful overhead shade during hot seasons.
 
 ---
 
 ## Files to create
 
-### 1. `sql/templates/attribute_shade_coverage.sql.j2` — new file
+### 1. `sql/templates/attribute_shade_coverage.sql.j2` - new file
 
 ```sql
 -- =============================================================================
@@ -47,12 +47,12 @@ all pixels in the 10m buffer contribute to the average, including zeros.
 --            apply height-weighted scoring curve → AVG across all pixels
 --            Result is in [0, 1].
 --
--- Scoring curve (concave — calibrated to Indian urban street trees):
---   0 ≤ h < 3m  → 0.00  (no canopy / shrubs / saplings — no meaningful shade)
+-- Scoring curve (concave - calibrated to Indian urban street trees):
+--   0 ≤ h < 3m  → 0.00  (no canopy / shrubs / saplings - no meaningful shade)
 --   3 ≤ h < 8m  → 0.30 + (h-3) × 0.08   [0.30 – 0.70]  (young street trees)
 --   8 ≤ h < 12m → 0.70 + (h-8) × 0.05   [0.70 – 0.90]  (mature: neem, peepal)
 --   12 ≤ h < 18m→ 0.90 + (h-12) × 0.0167 [0.90 – 1.00] (excellent canopy)
---   ≥ 18m       → 1.00  (rain tree / banyan — full shade, capped)
+--   ≥ 18m       → 1.00  (rain tree / banyan - full shade, capped)
 --
 -- Note: pixel value 0 = no canopy (valid data, not NoData).
 --       All pixels in the buffer contribute to the average (denominator
@@ -98,14 +98,14 @@ SET shade_coverage = 0
 WHERE shade_coverage IS NULL;
 ```
 
-### 2. `examples/profile_walk_india.yml` — new file
+### 2. `examples/profile_walk_india.yml` - new file
 
 ```yaml
 # =============================================================================
 # profile_walk_india.yml
-# India-adapted walkability profile — MAHP-calibrated weights
+# India-adapted walkability profile - MAHP-calibrated weights
 # Survey: KoboToolbox MAHP instrument, urban planning experts, Indian cities
-# Reference: SOW_CONTEXT.md — Phase 1 weight calibration
+# Reference: SOW_CONTEXT.md - Phase 1 weight calibration
 # =============================================================================
 
 name: walk_india
@@ -152,7 +152,7 @@ indicators:
     weight: 0.0999
     data_col: shade_coverage
     # shade_coverage is 0–1 (height-weighted average over 10m buffer)
-    # already scaled — pass through with linear identity mapping
+    # already scaled - pass through with linear identity mapping
     value_mappings:
       - { from: 0.0, to: 0.0 }
       - { from: 1.0, to: 1.0 }
@@ -201,14 +201,14 @@ indicators:
       - { from: 1, to: 1.0 }
 ```
 
-### 3. `examples/profile_bike_india.yml` — new file
+### 3. `examples/profile_bike_india.yml` - new file
 
 ```yaml
 # =============================================================================
 # profile_bike_india.yml
-# India-adapted bikeability profile — MAHP-calibrated weights
+# India-adapted bikeability profile - MAHP-calibrated weights
 # Survey: KoboToolbox MAHP instrument, urban planning experts, Indian cities
-# Reference: SOW_CONTEXT.md — Phase 1 weight calibration
+# Reference: SOW_CONTEXT.md - Phase 1 weight calibration
 # =============================================================================
 
 name: bike_india
@@ -219,7 +219,7 @@ indicators:
   - name: pavement
     weight: 0.1319
     data_col: pavement
-    # Surface quality — primary barrier for cyclists in India
+    # Surface quality - primary barrier for cyclists in India
     value_mappings:
       - { from: 0, to: 0.0 }   # unpaved / very poor
       - { from: 1, to: 0.3 }   # poor / gravel
@@ -277,7 +277,7 @@ indicators:
     weight: 0.0892
     data_col: shade_coverage
     # shade_coverage is 0–1 (height-weighted average over 10m buffer)
-    # already scaled — pass through with linear identity mapping
+    # already scaled - pass through with linear identity mapping
     value_mappings:
       - { from: 0.0, to: 0.0 }
       - { from: 1.0, to: 1.0 }
@@ -309,7 +309,7 @@ indicators:
 
 ## Files to modify
 
-### 4. `settings.py` — add field to `OptionalSettings` dataclass
+### 4. `settings.py` - add field to `OptionalSettings` dataclass
 
 Add `shade_coverage_path` alongside the existing optional path fields (`dem_path`,
 `noise_path`, `buildings_path`, etc.):
@@ -326,14 +326,14 @@ class OptionalSettings:
     greenness_path:      Optional[str] = None
     water_path:          Optional[str] = None
 
-    # NEW — Meta/WRI 1m canopy height raster clipped to city extent
+    # NEW - Meta/WRI 1m canopy height raster clipped to city extent
     # Pixel values: 0 (no canopy) to 31 (metres). Single band GeoTIFF.
     # Source: https://gee-community-catalog.org/projects/meta_trees/
     # Citation: Tolan et al. (2024), Remote Sensing of Environment, 300, 113888.
     shade_coverage_path: Optional[str] = None
 ```
 
-### 5. `core/optional_step.py` — add `ShadeCoverageStep` class
+### 5. `core/optional_step.py` - add `ShadeCoverageStep` class
 
 Add the class and its factory function alongside the existing optional layer classes
 (e.g. `DemStep`). The import pattern is identical to DEM:
@@ -365,7 +365,7 @@ class ShadeCoverageStep(DbStep):
         table  = "shade_coverage_raster"
         srid   = settings.global_settings.srid
 
-        # Build raster2pgsql command — same flags used for DEM import
+        # Build raster2pgsql command - same flags used for DEM import
         cmd = [
             "raster2pgsql",
             "-s", str(srid),   # source SRID
@@ -406,11 +406,11 @@ class ShadeCoverageStep(DbStep):
 
 
 def create_shade_coverage_step(settings: GlobalSettings) -> ShadeCoverageStep:
-    """Factory function — consistent with create_dem_step() pattern."""
+    """Factory function - consistent with create_dem_step() pattern."""
     return ShadeCoverageStep(settings)
 ```
 
-### 6. `core/attributes_step.py` — call the shade SQL template
+### 6. `core/attributes_step.py` - call the shade SQL template
 
 In `run_step()`, add the following block alongside the other optional attribute
 derivation calls (e.g. gradient, greenness, water):
@@ -429,10 +429,10 @@ if settings.optional.shade_coverage_path:
     )
     logEndTask()
 else:
-    log(3, "shade_coverage_path not set — shade_coverage column will be absent.")
+    log(3, "shade_coverage_path not set - shade_coverage column will be absent.")
 ```
 
-### 7. `examples/settings_osm_query.yml` (and `settings_osm_file.yml`) — add optional key
+### 7. `examples/settings_osm_query.yml` (and `settings_osm_file.yml`) - add optional key
 
 Under the existing `optional:` section, add:
 
@@ -441,7 +441,7 @@ optional:
   dem_path: data/bengaluru.tif          # existing example
   # ... other existing optional paths ...
 
-  # Meta/WRI 1m Global Canopy Height — clipped to city extent
+  # Meta/WRI 1m Global Canopy Height - clipped to city extent
   # Export from GEE as single-band GeoTIFF, values 0–31 (metres), EPSG matching srid
   # Citation: Tolan et al. (2024), Remote Sensing of Environment, 300, 113888
   shade_coverage_path: data/bengaluru_canopy_height.tif
@@ -462,7 +462,7 @@ var city = ee.FeatureCollection("your_city_asset_or_geometry");
 // Mosaic tiles, clip to city extent
 var canopy_clipped = canopy_ht.mosaic().clip(city);
 
-// Export as GeoTIFF — match SRID used in settings.yml
+// Export as GeoTIFF - match SRID used in settings.yml
 Export.image.toDrive({
   image: canopy_clipped,
   description: "bengaluru_canopy_height",
@@ -492,7 +492,7 @@ UPDATE edge SET shade_coverage = ... WHERE edge_id BETWEEN 10000 AND 19999;
 -- etc.
 ```
 
-Alternatively, ensure a btree index on `edge_id` exists before the step runs —
+Alternatively, ensure a btree index on `edge_id` exists before the step runs -
 NetAScore's `network_step` should already create this.
 
 ---
@@ -506,6 +506,6 @@ vision transformer and convolutional decoder trained on aerial lidar.
 Remote Sensing of Environment, 300, 113888.
 
 High Resolution Canopy Height Maps by WRI and Meta. Meta and World Resources
-Institute (WRI) — 2023. Source imagery © 2016 Maxar.
+Institute (WRI) - 2023. Source imagery © 2016 Maxar.
 License: Creative Commons Attribution 4.0 International (CC BY 4.0).
 ```

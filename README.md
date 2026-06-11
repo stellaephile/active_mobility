@@ -53,7 +53,7 @@ The easiest way to get started is running the ready-made Docker image. You need 
 docker compose run netascore
 ```
 
-By default this runs the example case for Salzburg, Austria. **This India adaptation uses a local OSM file as input** — see the next section for how to configure and run it for your area.
+By default this runs the example case for Salzburg, Austria. **This India adaptation uses a local OSM file as input** - see the next section for how to configure and run it for your area.
 
 ### Running an assessment for an Indian city
 
@@ -63,12 +63,12 @@ This adaptation uses **`settings_osm_file.yml`** as the primary settings file, w
 - It avoids Overpass API timeouts for large or complex areas.
 - It allows you to pre-process or enrich the OSM data before running the assessment.
 
-**Step 1 — Download an OSM extract for your area**
+**Step 1 - Download an OSM extract for your area**
 
 Download a `.osm.pbf` file for your city or region from one of these sources:
 
-- [Geofabrik India extracts](https://download.geofabrik.de/asia/india.html) — state-level and subregion extracts
-- [BBBike extracts](https://extract.bbbike.org/) — custom bounding-box extracts for any city
+- [Geofabrik India extracts](https://download.geofabrik.de/asia/india.html) - state-level and subregion extracts
+- [BBBike extracts](https://extract.bbbike.org/) - custom bounding-box extracts for any city
 
 For a specific city boundary, you can clip the state extract using `osmium`:
 
@@ -76,7 +76,7 @@ For a specific city boundary, you can clip the state extract using `osmium`:
 osmium extract --bbox=<min_lon,min_lat,max_lon,max_lat> india-latest.osm.pbf -o my_city.osm.pbf
 ```
 
-**Step 2 — Configure `settings_osm_file.yml`**
+**Step 2 - Configure `settings_osm_file.yml`**
 
 Edit `settings_osm_file.yml` and set the path to your OSM file:
 
@@ -86,7 +86,7 @@ osm_file: "data/my_city.osm.pbf"
 
 Adjust the output filename and any other parameters as needed.
 
-**Step 3 — Run NetAScore**
+**Step 3 - Run NetAScore**
 
 ```bash
 docker compose run netascore data/settings_osm_file.yml
@@ -104,7 +104,7 @@ python generate_index.py data/settings_osm_file.yml
 
 ## Shade Coverage (Optional)
 
-This adaptation adds **`shade_coverage`** as an optional indicator — tree canopy and overhead shade are among the most significant factors for walking and cycling willingness in India's climate.
+This adaptation adds **`shade_coverage`** as an optional indicator - tree canopy and overhead shade are among the most significant factors for walking and cycling willingness in India's climate.
 
 **Data source:** [Meta/WRI 1m Global Canopy Height Maps](https://gee-community-catalog.org/projects/meta_trees/) (Tolan et al. 2024), available free via Google Earth Engine.
 
@@ -181,9 +181,9 @@ After a successful run, a `data/` subdirectory will be created. The assessed net
 
 `ft` = *from-to* node direction; `tf` = *to-from* node direction.
 
-> **Bikeability score:** The reported per-segment bikeability is derived as `max(index_bike_ft, index_bike_tf)` — the better of the two directional scores. This reflects that a cyclist can travel in whichever direction is more suitable along a segment, making the maximum the appropriate summary statistic for segment-level analyses and mapping.
+> **Bikeability score:** The reported per-segment bikeability is derived as `max(index_bike_ft, index_bike_tf)` - the better of the two directional scores. This reflects that a cyclist can travel in whichever direction is more suitable along a segment, making the maximum the appropriate summary statistic for segment-level analyses and mapping.
 
-> **Walkability score:** The reported per-segment walkability is derived as `max(index_walk_ft, index_walk_tf)` — the better of the two directional scores.
+> **Walkability score:** The reported per-segment walkability is derived as `max(index_walk_ft, index_walk_tf)` - the better of the two directional scores.
 
 ### Visualising results in QGIS
 
@@ -233,7 +233,7 @@ Example output files are available at [doi.org/10.5281/zenodo.10886961](https://
 
 ## Contributing
 
-Contributions to improve this India adaptation are very welcome — particularly around:
+Contributions to improve this India adaptation are very welcome - particularly around:
 
 - Refined indicator weights reflecting Indian road conditions
 - Validation studies for Indian cities
@@ -245,6 +245,6 @@ See the [contribution guide](https://github.com/plus-mobilitylab/netascore/wiki/
 
 ## License
 
-This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
 
 The upstream NetAScore project is developed by the [PLUS Mobility Lab](https://github.com/plus-mobilitylab), University of Salzburg, and is also MIT licensed.

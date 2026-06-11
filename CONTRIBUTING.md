@@ -1,6 +1,6 @@
 # Contributing to NetAScore India Adaptation
 
-Thank you for your interest in contributing. This project adapts [NetAScore](https://github.com/plus-mobilitylab/netascore) for Indian cities — contributions that improve its accuracy, coverage, and usability in the Indian context are especially welcome.
+Thank you for your interest in contributing. This project adapts [NetAScore](https://github.com/plus-mobilitylab/netascore) for Indian cities - contributions that improve its accuracy, coverage, and usability in the Indian context are especially welcome.
 
 ---
 
@@ -31,11 +31,11 @@ Many Indian cities have gaps in OSM tagging for attributes NetAScore relies on (
 
 ### 5. Code contributions
 Bug fixes, performance improvements, and new features are welcome. Priority areas:
-- **Bikeable/Walkable Network Ratio (BNR/WNR)** — pincode/ward-level aggregation of segment scores into a single reportable KPI (see `SOW_CONTEXT.md`)
-- **Recursive scoring** — graph diffusion to propagate scores from high-quality to adjacent segments
-- **Gap identification** — Steiner tree based detection of missing links between high-scoring clusters
-- **Shade coverage** improvements — batch processing for large cities, alternative canopy data sources
-- **New optional indicators** — encroachment detection, lighting conditions
+- **Bikeable/Walkable Network Ratio (BNR/WNR)** - pincode/ward-level aggregation of segment scores into a single reportable KPI (see `SOW_CONTEXT.md`)
+- **Recursive scoring** - graph diffusion to propagate scores from high-quality to adjacent segments
+- **Gap identification** - Steiner tree based detection of missing links between high-scoring clusters
+- **Shade coverage** improvements - batch processing for large cities, alternative canopy data sources
+- **New optional indicators** - encroachment detection, lighting conditions
 
 ---
 
@@ -57,7 +57,7 @@ Bug fixes, performance improvements, and new features are welcome. Priority area
 - Follow the existing module structure: one class per pipeline step, factory functions for instantiation, `DbStep` as base class.
 - New optional indicators should follow the `DemImporter` / `ShadeCoverageImporter` pattern in `core/optional_step.py`.
 - New SQL logic should be in a Jinja2 template under `sql/templates/`, not inline Python strings.
-- Use `toolbox/helper.py` logging functions (`h.info`, `h.log`, `h.logBeginTask`) — no bare `print()` calls.
+- Use `toolbox/helper.py` logging functions (`h.info`, `h.log`, `h.logBeginTask`) - no bare `print()` calls.
 - Settings for new optional layers go in the `optional:` section of the YAML settings file; document them in `settings.md`.
 
 ---
