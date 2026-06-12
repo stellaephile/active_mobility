@@ -181,6 +181,8 @@ After a successful run, a `data/` subdirectory will be created. The assessed net
 
 `ft` = *from-to* node direction; `tf` = *to-from* node direction.
 
+<img width="1172" height="824" alt="Copy of Bengaluru1" src="https://github.com/user-attachments/assets/d71d435e-7e41-4ecd-b9e4-dd81e5404a87" />
+
 > **Bikeability score:** The reported per-segment bikeability is derived as `max(index_bike_ft, index_bike_tf)` - the better of the two directional scores. This reflects that a cyclist can travel in whichever direction is more suitable along a segment, making the maximum the appropriate summary statistic for segment-level analyses and mapping.
 
 > **Walkability score:** The reported per-segment walkability is derived as `max(index_walk_ft, index_walk_tf)` - the better of the two directional scores.
